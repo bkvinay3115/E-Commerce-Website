@@ -1,4 +1,8 @@
-Django
-gunicorn
-whitenoise
-Pillow
+asgiref==3.11.1
+beautifulsoup4==4.14.3
+Django==5.2.14
+django-bootstrap4==26.1
+soupsieve==2.8.4
+sqlparse==0.5.5
+typing_extensions==4.15.0
+tzdata==2026.2
