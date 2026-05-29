@@ -1,0 +1,125 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="text-center mb-4">Order Details</h2>
+
+    <!-- PRINT AREA -->
+    <div id="invoice-area">
+
+        <!-- INVOICE HEADER -->
+        <div class="text-center mb-4">
+            <h3>INVOICE</h3>
+            <p><strong>Your E-commerce Store</strong></p>
+            <hr>
+        </div>
+
+        <!-- ORDER SUMMARY -->
+        <div class="card shadow p-4 mb-4">
+            <p><strong>Order ID:</strong> {{ order.order_id }}</p>
+
+            <p><strong>Status:</strong>
+                <span class="badge
+                    {% if order.status == 'Delivered' %}
+                        badge-success
+                    {% elif order.status == 'Cancelled' %}
+                        badge-danger
+                    {% elif order.status == 'Processing' %}
+                        badge-warning
+                    {% elif order.status == 'Shipped' %}
+                        badge-info
+                    {% else %}
+                        badge-secondary
+                    {% endif %}
+                ">
+                    {{ order.status }}
+                </span>
+            </p>
+
+            {% if order.payment_method %}
+            <p><strong>Payment Method:</strong> {{ order.payment_method }}</p>
+
+            <!-- ✅ Payment Status Added Here -->
+            <p><strong>Payment Status:</strong>
+                {% if order.payment_method == "ONLINE" %}
+                Paid
+                {% else %}
+                Pending
+                {% endif %}
+            </p>
+            {% endif %}
+
+            <p><strong>Address:</strong> {{ order.address }}</p>
+            <p><strong>Date:</strong> {{ order.created_at|date:"d M Y, h:i A" }}</p>
+        </div>
+
+        <!-- PRODUCTS TABLE -->
+        <h4 class="mb-3">Products</h4>
+
+        {% if order.items.all %}
+        <div class="table-responsive">
+            <table class="table table-bordered text-center">
+
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price (Rs)</th>
+                        <th>Total (Rs)</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in order.items.all %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.price }}</td>
+                        <td><strong>{{ item.total }}</strong></td>
+                    </tr>
+                    {% endfor %}
+
+                    <tr>
+                        <td colspan="3"><strong>Grand Total</strong></td>
+                        <td><strong>Rs {{ order.total_price }}</strong></td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning text-center">
+            No products found for this order.
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="text-center mt-4 no-print">
+
+        <button onclick="printInvoice()" class="btn btn-primary">
+            Print Invoice
+        </button>
+
+        <a href="{% url 'download_invoice' order.order_id %}" class="btn btn-success">
+            Download PDF
+        </a>
+
+        <a href="{% url 'order_history' %}" class="btn btn-secondary">
+            Back
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+    function printInvoice() {
+        window.print();
+    }
+</script>
+
+{% endblock %}

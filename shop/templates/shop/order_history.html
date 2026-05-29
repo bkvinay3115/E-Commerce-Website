@@ -1,0 +1,107 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h2 class="mb-4 text-center">My Orders</h2>
+
+    {% if orders %}
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center">
+
+            <thead class="thead-dark">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for order in orders %}
+                <tr>
+
+                    <td><strong>{{ order.order_id }}</strong></td>
+
+                    <td>Rs {{ order.total_price }}</td>
+
+                    <td>
+                        <span class="badge
+                            {% if order.status == 'Delivered' %}
+                                badge-success
+                            {% elif order.status == 'Cancelled' %}
+                                badge-danger
+                            {% elif order.status == 'Processing' %}
+                                badge-warning
+                            {% elif order.status == 'Shipped' %}
+                                badge-info
+                            {% else %}
+                                badge-secondary
+                            {% endif %}
+                        ">
+                            {{ order.status }}
+                        </span>
+                    </td>
+
+                    <td>{{ order.created_at|date:"d M Y, h:i A" }}</td>
+
+                    <td>
+                        <a href="{% url 'order_detail' order.order_id %}" class="btn btn-info btn-sm">
+                            View
+                        </a>
+
+                        {% if order.status != 'Delivered' and order.status != 'Cancelled' %}
+                        <form method="POST" action="{% url 'cancel_order' order.order_id %}"
+                            id="cancel-form-{{ order.order_id }}" class="mt-1">
+                            {% csrf_token %}
+
+                            <!-- ✅ FIXED BUTTON -->
+                            <button type="button" class="btn btn-danger btn-sm"
+                                onclick="confirmCancel('{{ order.order_id }}')">
+                                Cancel
+                            </button>
+                        </form>
+                        {% endif %}
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-info text-center">
+        You have not placed any orders yet.
+    </div>
+
+    {% endif %}
+
+</div>
+
+<!-- ✅ SWEETALERT SCRIPT -->
+<script>
+    function confirmCancel(orderId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to cancel this order!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, cancel it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('cancel-form-' + orderId).submit();
+            }
+        });
+    }
+</script>
+
+{% endblock %}

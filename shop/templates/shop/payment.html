@@ -1,0 +1,23 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+
+<div class="container mt-5 text-center">
+
+    <h2>Online Payment</h2>
+
+    <p>Order ID: <strong>{{ order.order_id }}</strong></p>
+    <p>Total Amount: <strong>Rs {{ order.total_price }}</strong></p>
+
+    <p>This is a simulated payment page.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">
+            Pay Now
+        </button>
+    </form>
+
+</div>
+
+{% endblock %}

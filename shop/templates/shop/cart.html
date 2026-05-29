@@ -1,0 +1,66 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+
+<h1 class="mb-4">Your Cart</h1>
+
+{% if cart_items %}
+
+<div id="cart-content">
+
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price (Rs)</th>
+                <th>Total (Rs)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.product.price }}</td>
+                <td>{{ item.product.price|floatformat:2|add:"0"|floatformat:2|floatformat }}{% comment %} fallback safe
+                    {% endcomment %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<h4 class="text-right">Total Price: <strong>Rs {{ total_price }}</strong></h4>
+
+<div class="mt-3">
+    <a href="{% url 'checkout' %}" class="btn btn-success">Proceed to Checkout</a>
+    <a href="{% url 'home' %}" class="btn btn-secondary">Continue Shopping</a>
+</div>
+
+{% else %}
+
+<div class="alert alert-info">
+    Your cart is empty.
+</div>
+
+<a href="{% url 'home' %}" class="btn btn-primary">Go Shopping</a>
+
+{% endif %}
+
+<!-- Optional Print Function -->
+<script>
+    function printBill() {
+        var printContents = document.getElementById('cart-content').innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = "<html><head><title>Print Bill</title></head><body>" + printContents + "</body>";
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    }
+</script>
+
+{% endblock %}
