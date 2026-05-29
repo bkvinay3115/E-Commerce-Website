@@ -22,7 +22,7 @@ pyhanko-certvalidator==0.31.1
 pypdf==6.12.2
 python-bidi==0.6.10
 PyYAML==6.0.3
-reportlab==4.0.9
+reportlab==3.6.13
 requests==2.34.2
 six==1.17.0
 soupsieve==2.8
