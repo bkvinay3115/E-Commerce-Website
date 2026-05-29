@@ -22,7 +22,7 @@ pyhanko-certvalidator==0.31.1
 pypdf==6.12.2
 python-bidi==0.6.10
 PyYAML==6.0.3
-reportlab==3.6.13
+reportlab==4.2.2
 requests==2.34.2
 six==1.17.0
 soupsieve==2.8
@@ -36,4 +36,4 @@ uritools==6.1.2
 urllib3==2.7.0
 webencodings==0.5.1
 whitenoise==6.12.0
-xhtml2pdf==0.2.11
+xhtml2pdf==0.2.17
